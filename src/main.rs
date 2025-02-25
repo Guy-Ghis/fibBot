@@ -1,3 +1,8 @@
+mod fibonacci;
+use fibonacci::fib;
 fn main() {
-    println!("Hello, world!");
+    let result = fib(100);
+
+    println!("The 100th fibonacci number is: {}", result);
+
 }

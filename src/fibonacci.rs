@@ -1,6 +1,6 @@
 // recursive approach
 
-// fn fib(n: u32) -> u32 {
+// pub fn fib(n: u32) -> u32 {
 //     if n <= 1 {
 //         return n;
 //     }
@@ -9,7 +9,7 @@
 
 // Iterative approach
 
-fn fib(n: u32) -> u32 {
+pub fn fib(n: u32) -> u32 {
     let mut prev = 0;
     let mut curr = 1;
     for _ in 0..n {

@@ -1,5 +1,18 @@
-name: 'Hello World'
-description: 'Greet someone and record the time'
+#action.yml
+name: 'fibBot'
+description: 'Enable Fibonacci series up to max_threshold'
+inputs:
+  enable_fib: #id of the input
+    description: 'Do you want to enable the fibBot ?'
+    required: false
+    default: 'true'
+  max_threshold: #id of the input
+    description: 'The maximum threshold for the Fibonacci series'
+    required: false
+    default: '185'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.enable_fib }}
+    - ${{ input.max_threshold }}
