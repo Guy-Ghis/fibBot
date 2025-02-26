@@ -1,5 +1,5 @@
 #action.yml
-name: 'fibBot'
+name: fibBot
 description: 'Enable Fibonacci series up to max_threshold'
 inputs:
   enable_fib: #id of the input
@@ -9,10 +9,10 @@ inputs:
   max_threshold: #id of the input
     description: 'The maximum threshold for the Fibonacci series'
     required: false
-    default: '185'
+    default: '100'
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'docker://Dockerfile'
   args:
     - ${{ inputs.enable_fib }}
     - ${{ inputs.max_threshold }}
