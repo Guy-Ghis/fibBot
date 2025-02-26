@@ -12,7 +12,7 @@ inputs:
     default: '100'
 runs:
   using: 'docker'
-  image: 'docker://Dockerfile'
+  image: 'Dockerfile'
   args:
     - ${{ inputs.enable_fib }}
     - ${{ inputs.max_threshold }}
