@@ -1,4 +1,4 @@
-name: Rust Hello World
+name: fibBot
 
 on:
   push:
