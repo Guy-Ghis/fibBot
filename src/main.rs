@@ -1,8 +1,8 @@
 mod fibonacci;
 use fibonacci::fib;
 fn main() {
-    let result = fib(-185);
+    let result = fib(20);
 
-    println!("The 100th fibonacci number is: {}", result);
+    println!("The 20th fibonacci number is: {}", result);
 
 }
