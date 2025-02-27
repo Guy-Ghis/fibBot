@@ -1,14 +1,3 @@
-// recursive approach
-
-// pub fn fib(n: u32) -> u32 {
-//     if n <= 1 {
-//         return n;
-//     }
-//     fib(n - 1) + fib(n - 2)
-// }
-
-// Iterative approach
-
 pub fn fib(n: i64) -> i64 {
 
     if n == 0 {
