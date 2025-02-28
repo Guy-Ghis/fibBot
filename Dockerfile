@@ -6,7 +6,7 @@ COPY . .
 
 RUN apk add musl-dev
 
-RUN cargo build --release
+RUN cargo build --release --verbose
 
 FROM alpine:latest
 
