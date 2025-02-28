@@ -57,4 +57,4 @@ Each day, ensure that you have a new working component or improvement that corre
     - **Deliverable:** A fully functioning GitHub Action tested in a dummy repository, with successful execution on pull requests.
 - **Milestone 2:** **Documentation & Final Touches**
     - **Deliverable:** A comprehensive README with setup instructions, parameter configurations, and code comments; plus any necessary code refinements.
-- **End-of-Day Outcome:** By the end of Day 6, you will have a polished, documented, and fully working GitHub Action that is ready for public use.
+- **End-of-Day Outcome:** By the end of Day 6, you will have a polished, documented, and fully working GitHub Action that is ready for public use
