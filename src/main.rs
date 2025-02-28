@@ -6,6 +6,7 @@ use fibonacci::fib;
 use extract_numbers::extract_numbers;
 use std::env::{self, args};
 use get_pr_content::get_pr_body;
+use get_pr_content::get_pull_request;
 
 fn main() {
 
@@ -16,7 +17,12 @@ fn main() {
     .parse::<u32>()
     .expect("Invalid PR_NUMBER");
 
-let content = get_pr_body(pr_number).unwrap();
+    let owner = "Guy-Ghis"; // Repository owner
+    let repo = env::var("GITHUB_REPOSITORY")?;
+    let github_token = env::var("GITHUB_TOKEN")?;
+
+let content = get_pull_request(pr_number, &owner, &repo, &github_token)
+    .expect("Failed to get pull request content");
 
 let content_numbers = extract_numbers(content);
 
