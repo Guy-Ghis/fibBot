@@ -8,14 +8,15 @@ use std::env::{self, args};
 use get_pr_content::get_pr_body;
 use get_pr_content::get_pull_request;
 
-fn main() {
+async fn main() {
 
     let args: Vec<String> = args().skip(1).collect();
     
-    let pr_number = env::var("PR_NUMBER")
-    .expect("PR_NUMBER not set")
-    .parse::<u32>()
-    .expect("Invalid PR_NUMBER");
+    let pr_number = octocrab
+    .pulls(&owner, &repo)
+    .get(pr_number)
+    .await
+    .expect("Failed to get pull request")?;
 
     let owner = "Guy-Ghis"; // Repository owner
     let repo = env::var("GITHUB_REPOSITORY")?;
