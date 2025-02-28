@@ -3,18 +3,23 @@ mod fib_vector;
 mod get_pr_content;
 mod extract_numbers;
 
-use extract_numbers::extract_numbers;
-use fib_vector::fibonacci_vector;
-use std::env::args;
-
 use fibonacci::fib;
-use get_pr_content::get_pull_request; fn main() {
+use extract_numbers::extract_numbers;
+use std::env::{self, args};
+use get_pr_content::get_pr_body;
 
-    let content = get_pull_request();
-
-    let content_numbers = extract_numbers(content);
+fn main() {
 
     let args: Vec<String> = args().skip(1).collect();
+    
+    let pr_number = env::var("PR_NUMBER")
+    .expect("PR_NUMBER not set")
+    .parse::<u32>()
+    .expect("Invalid PR_NUMBER");
+
+let content = get_pr_body(pr_number).unwrap();
+
+let content_numbers = extract_numbers(content);
 
     if args.is_empty() {
         println!("No arguments supplied!");
@@ -36,14 +41,13 @@ use get_pr_content::get_pull_request; fn main() {
 
     if enable_fib {
         println!("FibBot enabled successfully with max_threshold: {}", max_threshold);
-        let fib_numbers = fibonacci_vector(content_numbers);
 
-        for fib_number in fib_numbers.iter() {
-            if *fib_number <= max_threshold {
-            println!("Fibonacci number: {}", fib_number);
+        for number in content_numbers.iter() {
+            if *number <= max_threshold {
+                let fib_number = fib(*number);
+                println!("Fibonacci numbers: {:?}", fib_number);
             }
         }
-        println!("Fibonacci numbers: {:?}", fib_numbers);
     } else {
         println!("FibBot is disabled!");
     }

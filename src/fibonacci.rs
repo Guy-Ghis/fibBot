@@ -1,4 +1,4 @@
-pub fn fib(n: i64) -> i64 {
+pub fn fib(n: i128) -> i128 {
 
     if n == 0 {
         return 0;

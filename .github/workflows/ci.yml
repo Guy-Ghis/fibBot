@@ -12,7 +12,22 @@ jobs:
   build-and-run:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build and run Rust code
         uses: ./
+        id: program_output
+      - name: Post output as comment
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = process.env['program_output'];
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output,
+            });
