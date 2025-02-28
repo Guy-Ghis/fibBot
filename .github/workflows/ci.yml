@@ -5,6 +5,7 @@ on:
     branches:
       - main
   pull_request:
+    types: [opened, synchronize, reopened]
     branches:
       - main
   workflow_dispatch:
@@ -16,3 +17,14 @@ jobs:
         uses: actions/checkout@v2
       - name: Build and run Rust code
         uses: ./
+        with:
+          pr_number: ${{ github.event.pull_request.number }}
+        id: program_output
+      - run: echo "::set-output name=output::$(cat output.txt)"
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          message: |
+            Dockerfile output: ${{ steps.program_output.outputs.output }}
+            GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          reactions: eyes, rocket
