@@ -1,5 +1,4 @@
 mod fibonacci;
-mod fib_vector;
 mod get_pr_content;
 mod extract_numbers;
 

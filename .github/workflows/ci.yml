@@ -17,12 +17,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Build and run Rust code
         uses: ./
-        id: program_output
-      - run: echo "::set-output name=output::$(cat output.txt)"
-      - name: Comment PR
-        uses: thollander/actions-comment-pull-request@v3
-        with:
-          message: |
-            Dockerfile output: ${{ steps.program_output.outputs.output }}
-            GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          reactions: eyes, rocket
+    #     id: program_output
+    #   - run: echo "::set-output name=output::$(cat output.txt)"
+    #   - name: Comment PR
+    #     uses: thollander/actions-comment-pull-request@v3
+    #     with:
+    #       message: |
+    #         Dockerfile output: ${{ steps.program_output.outputs.output }}
+    #         GIT_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #       reactions: eyes, rocket
