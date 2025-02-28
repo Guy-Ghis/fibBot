@@ -14,6 +14,6 @@ WORKDIR /app
 
 RUN apk add libgcc
 
-COPY --from=build /app/target/release/fib-bot /app/fib-bot
+COPY --from=build /app/target/release/fibbot /app/fibbot
 
-ENTRYPOINT [ "/app/fib-bot" ]
+ENTRYPOINT [ "/app/fibbot" ]
