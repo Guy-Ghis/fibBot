@@ -17,6 +17,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Build and run Rust code
         uses: ./
+        with:
+          pr_number: ${{ github.event.pull_request.number }}
         id: program_output
       - run: echo "::set-output name=output::$(cat output.txt)"
       - name: Comment PR
