@@ -61,12 +61,12 @@ if pr_files.items.is_empty() {
     println!("No numbers found in this pull_request.");
 }
 
-let pr_content = pr_files.items.first().unwrap().patch.clone().unwrap();
-let _ = post_comment(&pr_content).await;
+let pr_content = pull_request_numbers.clone();
+let _ = post_comment(&format!("{:?}", pr_content)).await;
 
 let mut responses = Vec::new(); // Vector to store each Fibonacci result
 
-for num in &pull_request_numbers {
+for num in pr_content.iter() {
     if num > &max_threshold.into() {
         responses.push(format!(
             "- Fibonacci({}) = Skipped (above threshold of {})",
@@ -74,7 +74,7 @@ for num in &pull_request_numbers {
         ));
         continue;
     }
-    let fib = fib(*num as i128);
+    let fib = fib(*num as u128);
     responses.push(format!("- Fibonacci({}) = {}", num, fib)); // Store each result
 }
 

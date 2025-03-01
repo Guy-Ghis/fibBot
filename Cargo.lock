@@ -196,6 +196,8 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "dotenv",
+ "num-bigint",
+ "num-traits",
  "octocrab",
  "reqwest",
  "serde",
