@@ -1,12 +1,12 @@
 # Stage 1: Build
 FROM rust:alpine AS build
 
-# Install necessary dependencies
-RUN apk add --no-cache musl-dev pkgconfig openssl-dev
-
 WORKDIR /app
 
 COPY . .
+
+# Install necessary dependencies
+RUN apk add --no-cache musl-dev pkgconfig openssl-dev
 
 # Build the release binary
 RUN cargo build --release

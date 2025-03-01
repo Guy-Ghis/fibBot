@@ -14,21 +14,43 @@ permissions:
 jobs:
   run-fibbot:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-      repository-projects: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Run FibBot
         uses: Guy-Ghis/fibBot@main
 
-      - name: Get PR number
-        id: pr_number
-        run: |
-          echo "pr_number=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
-          echo "enable_fib=true" >> $GITHUB_ENV
-          echo "max_threshold=100" >> $GITHUB_ENV
+      - name: Get PR number and body
+        id: pr-info
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+            });
+            return {
+              number: context.payload.pull_request.number,
+              body: pr.body || "",
+            };
+            - name: Run Rust code
+            run: |
+              docker run --rm my-rust-app \
+                --pr-number ${{ steps.pr-info.outputs.number }} \
+                --pr-body "${{ steps.pr-info.outputs.body }}" \
+                --github-token ${{ secrets.GITHUB_TOKEN }}
+    
+          # Post the result as a comment on the PR
+      - name: Post comment on PR
+        uses: actions/github-script@v6
+        with:
+              script: |
+                const { data: comment } = await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: ${{ steps.pr-info.outputs.number }},
+                  body: `Fibonacci results:\n${process.env.FIB_RESULTS}`,
+                });
