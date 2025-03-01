@@ -22,11 +22,6 @@ async fn main() {
         .parse()
         .unwrap_or(100);
 
-        // let pr_number: u64 = env::var("INPUT_PR_NUMBER")
-        // .expect("PR_NUMBER not set")
-        // .parse::<u64>()
-        // .expect("Invalid PR_NUMBER");
-
         let pr_number = args.get(3).unwrap_or(&"1".to_string()).parse::<u64>().unwrap_or(1);
 
     println!("FibBot application is running...");
@@ -70,27 +65,16 @@ let pr_content = pr_files.items.first().unwrap().patch.clone().unwrap();
 let _ = post_comment(&pr_content).await;
 
 let mut response =
-    String::from("#### Fibonacci output of each number in the pull_request is:\n");
+    String::from("Fibonacci output of each number in the pull_request is:\n");
 for file in &pr_files {
     if let Some(num_str) = file.patch.as_ref().and_then(|patch| extract_numbers(patch).first().cloned()) {
         let num = num_str;
             let fib = fib(num.into());
             response.push_str(&format!("- Fibonacci({}) = {}\n", num, fib));
         }
+    }
         if let Err(e) = post_comment(&response).await {
             eprintln!("Error posting comment: {}", e);
         }
-    }
-}
 
-// for number in content_numbers.iter() {
-    // }
-        //     if *number <= max_threshold {
-        //         let fib_number = fib(*number);
-        //         println!("Fibonacci numbers: {:?}", fib_number);
-        //     }
-        // }
-//     } else {
-//         println!("FibBot is disabled!");
-//     }
-// }
+}
