@@ -9,7 +9,7 @@ pub async fn post_comment(pr_content: &str) -> Result<(), reqwest::Error> {
 
     let pr_number = args.get(3).unwrap_or(&"1".to_string()).parse::<u64>().unwrap_or(1);
 
-    let github_token = env::var("INPUT_GITHUB_TOKEN").expect("GITHUB_TOKEN not set");
+    let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not set");
 
     println!("{}", github_token);
     let url = format!(

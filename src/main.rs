@@ -65,6 +65,10 @@ println!("Extracted numbers: {:?}", pull_request_numbers);
 if pr_files.items.is_empty() {
     println!("No numbers found in this pull_request.");
 }
+
+let pr_content = pr_files.items.first().unwrap().patch.clone().unwrap();
+let _ = post_comment(&pr_content).await;
+
 let mut response =
     String::from("#### Fibonacci output of each number in the pull_request is:\n");
 for file in &pr_files {
