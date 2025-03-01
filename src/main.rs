@@ -64,17 +64,26 @@ if pr_files.items.is_empty() {
 let pr_content = pr_files.items.first().unwrap().patch.clone().unwrap();
 let _ = post_comment(&pr_content).await;
 
-let mut response =
-    String::from("Fibonacci output of each number in the pull_request is:\n");
+let mut responses = Vec::new(); // Vector to store each Fibonacci result
+
 for file in &pr_files {
     if let Some(num_str) = file.patch.as_ref().and_then(|patch| extract_numbers(patch).first().cloned()) {
         let num = num_str;
-            let fib = fib(num.into());
-            response.push_str(&format!("- Fibonacci({}) = {}\n", num, fib));
-        }
+        let fib = fib(num.into());
+        responses.push(format!("- Fibonacci({}) = {}", num, fib)); // Store each result
     }
-        if let Err(e) = post_comment(&response).await {
-            eprintln!("Error posting comment: {}", e);
-        }
+}
+
+// Construct the final response string
+let mut response = String::from("Fibonacci output of each number in the pull_request is:\n");
+for res in responses {
+    response.push_str(&res);
+    response.push('\n');
+}
+
+// Post the final response
+if let Err(e) = post_comment(&response).await {
+    eprintln!("Error posting comment: {}", e);
+}
 
 }
