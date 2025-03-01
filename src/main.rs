@@ -1,20 +1,33 @@
 mod fibonacci;
 mod get_pr_content;
 mod extract_numbers;
+mod comment;
 
 use fibonacci::fib;
+use comment::post_comment;
 use extract_numbers::extract_numbers;
-use std::env::{self, args};
-use get_pr_content::get_pr_body;
 use get_pr_content::get_pull_request;
+use std::env::{self, args};
+use tokio;
 
-fn main() {
+#[tokio::main]
+async fn main() {
 
     let args: Vec<String> = env::args().collect();
 
-    let pr_number = &args[1];
-    let pr_body = &args[2];
-    let github_token = &args[3];
+    let enable_fib = args.get(1).unwrap_or(&"true".to_string()).to_lowercase() == "true";
+    let max_threshold: u8 = args
+        .get(2)
+        .unwrap_or(&"100".to_string())
+        .parse()
+        .unwrap_or(100);
+
+    let pr_number: i128 = env::var("PR_NUMBER")
+    .expect("PR_NUMBER not set")
+    .parse::<i128>()
+    .expect("Invalid PR_NUMBER");
+    // let pr_body = &args[2];
+    // let github_token = &args[3];
     
     // let pr_number = octocrab
     // .pulls(&owner, &repo)
@@ -29,38 +42,33 @@ fn main() {
 // let content = get_pull_request(pr_number, &owner, &repo, &github_token)
 //     .expect("Failed to get pull request content");
 
-    let content_numbers: Vec<i128> = pr_body
-        .split_whitespace()
-        .filter_map(|word| word.parse()::<i128>().ok())
-        .collect();
+println!("FibBot application is running...");
+println!("Fibonacci Calculation Enabled: {}", enable_fib);
+println!("Max Threshold is: {}", max_threshold);
 
-    let results = String::new();
+let pr_number: u64 = env::var("PR_NUMBER")
+    .expect("PR_NUMBER not set")
+    .parse::<u64>()
+    .expect("Invalid PR_NUMBER");
 
-    if args.is_empty() {
-        println!("No arguments supplied!");
-        return;
-    } else if args.len() != 2 {
-        println!("FibBot requires exactly two parameters!");
-        return;
+println!("the pull_request number is: {}",pr_number);
+
+let pr_numbers = get_pull_request(pr_number).await;
+println!("Extracted numbers: {:?}", pr_numbers);
+
+if pr_numbers.is_empty() {
+    println!("No numbers found in this pull_request.");
+}
+let mut response =
+    String::from("#### Fibonacci output of each number in the pull_request is:\n");
+for &num in &pr_numbers {
+    let fib = fib(num);
+    response.push_str(&format!("- Fibonacci({}) = {}\n", num, fib));
+}
+    if let Err(e) = post_comment(&response).await {
+        eprintln!("Error posting comment: {}", e);
     }
-
-    let enable_fib = args[0].to_lowercase() == "true";
-    
-    let max_threshold: i128 = match args[1].parse() {
-        Ok(value) => value,
-        Err(_) => {
-            println!("Invalid argument. max_threshold must be an integer!");
-            return;
-        }
-    };
-
-    if enable_fib {
-        println!("FibBot enabled successfully with max_threshold: {}", max_threshold);
-
-        for number in numbers {
-            let fib_answers = fib(number);
-            results.push_str(&format!("Fibonacci({}) = {}\n", number, fib_answers));
-        }
+}
 
         // for number in content_numbers.iter() {
         //     if *number <= max_threshold {
@@ -68,7 +76,7 @@ fn main() {
         //         println!("Fibonacci numbers: {:?}", fib_number);
         //     }
         // }
-    } else {
-        println!("FibBot is disabled!");
-    }
-}
+//     } else {
+//         println!("FibBot is disabled!");
+//     }
+// }
