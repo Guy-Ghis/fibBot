@@ -7,7 +7,7 @@ use fibonacci::fib;
 use comment::post_comment;
 use extract_numbers::extract_numbers;
 use get_pr_content::get_pull_request;
-use std::env::{self, args};
+use std::env::{self};
 use tokio;
 
 #[tokio::main]
@@ -22,55 +22,66 @@ async fn main() {
         .parse()
         .unwrap_or(100);
 
-    let pr_number: i128 = env::var("PR_NUMBER")
-    .expect("PR_NUMBER not set")
-    .parse::<i128>()
-    .expect("Invalid PR_NUMBER");
-    // let pr_body = &args[2];
-    // let github_token = &args[3];
-    
-    // let pr_number = octocrab
-    // .pulls(&owner, &repo)
-    // .get(pr_number)
-    // .await
-    // .expect("Failed to get pull request")?;
+        // let pr_number: u64 = env::var("INPUT_PR_NUMBER")
+        // .expect("PR_NUMBER not set")
+        // .parse::<u64>()
+        // .expect("Invalid PR_NUMBER");
 
-    // let owner = "Guy-Ghis";
-    // let repo = env::var("GITHUB_REPOSITORY")?;
-    // let github_token = env::var("GITHUB_TOKEN")?;
+        let pr_number = &args[3];
+        let pr_number: u64 = pr_number.parse().expect("failed to parse PR_NUMBER");
 
-// let content = get_pull_request(pr_number, &owner, &repo, &github_token)
-//     .expect("Failed to get pull request content");
+    println!("FibBot application is running...");
+    println!("Fibonacci Calculation Enabled: {}", enable_fib);
+    println!("Max Threshold is: {}", max_threshold);
+    println!("the pull_request number is: {}",pr_number);
 
-println!("FibBot application is running...");
-println!("Fibonacci Calculation Enabled: {}", enable_fib);
-println!("Max Threshold is: {}", max_threshold);
 
-let pr_number: u64 = env::var("PR_NUMBER")
-    .expect("PR_NUMBER not set")
-    .parse::<u64>()
-    .expect("Invalid PR_NUMBER");
+let github_repository =
+        env::var("GITHUB_REPOSITORY").unwrap_or_else(|_| "t-Guy-Ghis/fibBot".to_string());
+    let github_repository_vec = github_repository.split("/").collect::<Vec<&str>>();
+    let owner = github_repository_vec[0];
+    let repo = github_repository_vec[1];
 
-println!("the pull_request number is: {}",pr_number);
+let pr_files = get_pull_request(owner, repo, pr_number).await;
+println!("Extracted numbers: {:?}", pr_files);
 
-let pr_numbers = get_pull_request(pr_number).await;
-println!("Extracted numbers: {:?}", pr_numbers);
+let pr_files = match pr_files {
+    Ok(files) => files,
+    Err(e) => {
+        eprintln!("Error fetching pull request files: {}", e);
+        return;
+    }
+};
 
-if pr_numbers.is_empty() {
+if pr_files.items.is_empty() {
+    println!("No files found in this pull request.");
+    return;
+}
+
+let path = &pr_files.items.first().unwrap().patch.clone().unwrap();
+
+let pull_request_numbers = extract_numbers(path);
+println!("Extracted numbers: {:?}", pull_request_numbers);
+
+if pr_files.items.is_empty() {
     println!("No numbers found in this pull_request.");
 }
 let mut response =
     String::from("#### Fibonacci output of each number in the pull_request is:\n");
-for &num in &pr_numbers {
-    let fib = fib(num);
-    response.push_str(&format!("- Fibonacci({}) = {}\n", num, fib));
-}
-    if let Err(e) = post_comment(&response).await {
-        eprintln!("Error posting comment: {}", e);
+for file in &pr_files {
+    if let Some(num_str) = file.patch.as_ref().and_then(|patch| extract_numbers(patch).first().cloned()) {
+        let num = num_str;
+            let fib = fib(num.into());
+            response.push_str(&format!("- Fibonacci({}) = {}\n", num, fib));
+        }
+        if let Err(e) = post_comment(&response).await {
+            eprintln!("Error posting comment: {}", e);
+        }
     }
 }
 
-        // for number in content_numbers.iter() {
+// for number in content_numbers.iter() {
+    // }
         //     if *number <= max_threshold {
         //         let fib_number = fib(*number);
         //         println!("Fibonacci numbers: {:?}", fib_number);
