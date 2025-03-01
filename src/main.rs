@@ -42,7 +42,7 @@ println!("FibBot application is running...");
 println!("Fibonacci Calculation Enabled: {}", enable_fib);
 println!("Max Threshold is: {}", max_threshold);
 
-let pr_number: u64 = env::var("PR_NUMBER")
+let pr_number: u64 = env::var("INPUT_PR_NUMBER")
     .expect("PR_NUMBER not set")
     .parse::<u64>()
     .expect("Invalid PR_NUMBER");
