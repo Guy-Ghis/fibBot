@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run FibBot
-        uses: Guy-Ghis/fibBot@main
+        uses: ./
         with:
           enable_fib: "true"
           max_threshold: "100"
