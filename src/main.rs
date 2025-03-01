@@ -67,6 +67,13 @@ let _ = post_comment(&pr_content).await;
 let mut responses = Vec::new(); // Vector to store each Fibonacci result
 
 for num in &pull_request_numbers {
+    if num > &max_threshold.into() {
+        responses.push(format!(
+            "- Fibonacci({}) = Skipped (above threshold of {})",
+            num, max_threshold
+        ));
+        continue;
+    }
     let fib = fib(*num as i128);
     responses.push(format!("- Fibonacci({}) = {}", num, fib)); // Store each result
 }
