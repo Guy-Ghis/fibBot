@@ -66,12 +66,9 @@ let _ = post_comment(&pr_content).await;
 
 let mut responses = Vec::new(); // Vector to store each Fibonacci result
 
-for file in &pr_files {
-    if let Some(num_str) = file.patch.as_ref().and_then(|patch| extract_numbers(patch).first().cloned()) {
-        let num = num_str;
-        let fib = fib(num.into());
-        responses.push(format!("- Fibonacci({}) = {}", num, fib)); // Store each result
-    }
+for num in &pull_request_numbers {
+    let fib = fib(*num as i128);
+    responses.push(format!("- Fibonacci({}) = {}", num, fib)); // Store each result
 }
 
 // Construct the final response string
