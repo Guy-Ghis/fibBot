@@ -36,7 +36,7 @@ async fn main() {
 
 
 let github_repository =
-        env::var("GITHUB_REPOSITORY").unwrap_or_else(|_| "t-Guy-Ghis/fibBot".to_string());
+        env::var("GITHUB_REPOSITORY").unwrap_or_else(|_| "Guy-Ghis/fibBot".to_string());
     let github_repository_vec = github_repository.split("/").collect::<Vec<&str>>();
     let owner = github_repository_vec[0];
     let repo = github_repository_vec[1];
