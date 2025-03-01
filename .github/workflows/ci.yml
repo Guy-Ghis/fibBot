@@ -30,4 +30,4 @@ jobs:
           max_threshold: "100"
           pr_number: ${{ github.event.pull_request.number }}
         env:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
