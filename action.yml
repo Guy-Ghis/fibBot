@@ -1,18 +1,32 @@
 #action.yml
-name: fibBot
-description: 'Enable Fibonacci series up to max_threshold'
+name: "fibBot"
+description: "Calculates fibonacci numbers of numbers in a pull request up to max_threshold"
+author: "Guy-Ghis"
+
 inputs:
+  pr_number: #id of the input
+    description: "The number of the pull request"
+    required: true
   enable_fib: #id of the input
-    description: 'Do you want to enable the fibBot ?'
+    description: "Do you want to enable the fibBot ?"
     required: false
-    default: 'true'
+    default: "true"
   max_threshold: #id of the input
-    description: 'The maximum threshold for the Fibonacci series'
+    description: "The maximum number for which the Fibonacci number will be calculated"
     required: false
-    default: '100'
+    default: "100"
+  github_token: #id of the input
+    description: "The token to use to interact with the GitHub API"
+    required: true
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  args:
-    - ${{ inputs.enable_fib }}
-    - ${{ inputs.max_threshold }}
+  using: "composite"
+  steps:
+    - name: Build fibBot
+      run: |
+      shell: bash
+    - name: Run fibBot
+      run: |
+        export PR_NUMBER="${{ inputs.pr_number }}"
+        export GITHUB_TOKEN="${{ inputs.github_token }}"
+        ./target/release/fibbot "${{ inputs.enable_fib }}" "${{ inputs.max_threshold }}"
+      shell: bash

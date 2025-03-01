@@ -1,10 +1,23 @@
-pub fn extract_numbers(pr_content: String) -> Vec<i128> {
-    let numbers: Vec<String> = pr_content.split_whitespace().map(String::from).collect();
-    let mut result: Vec<i128> = Vec::new();
-    for i in numbers{
-        if i.parse::<i128>().is_ok(){
-            result.push(i.parse().unwrap());
+pub fn extract_numbers(pr_content: &str) -> Vec<i128> {
+    let mut pr_numbers = Vec::new();
+    let mut found_number = String::new();
+
+    for char in pr_content.chars() {
+        if char.is_ascii_digit() {
+            found_number.push(char);
+        } else if !found_number.is_empty() {
+            if let Ok(num) = found_number.parse::<i128>() {
+                pr_numbers.push(num);
+            }
+            found_number.clear();
         }
     }
-    result
+
+    if !found_number.is_empty() {
+        if let Ok(num) = found_number.parse::<i128>() {
+            pr_numbers.push(num);
+        }
+    }
+
+    pr_numbers
 }

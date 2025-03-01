@@ -1,42 +1,35 @@
-use reqwest::blocking::Client;
+use reqwest::Client;
 use std::env;
 
-pub fn post_comment(pr_number: u32, owner: &str, repo: &str, comment: String) -> Result<(), Box<dyn std::error::Error>> {
-    let token = env::var("GITHUB_TOKEN")?;
-    let url = format!("https://api.github.com/repos/{}/{}/issues/{}/comments", owner, repo, pr_number);
+pub async fn post_comment(pr_content: &str) -> Result<(), reqwest::Error> {
+    let repo = env::var("GITHUB_REPOSITORY").expect("GITHUB_REPOSITORY not set");
+    let pr_number = env::var("PR_NUMBER")
+        .expect("PR_NUMBER not set")
+        .parse::<i128>()
+        .expect("Invalid PR_NUMBER");
+
+    let github_token = env::var("GITHUB_TOKEN").expect("GITHUB_TOKEN not set");
+
+    let url = format!(
+        "https://api.github.com/repos/{}/issues/{}/comments",
+        repo, pr_number
+    );
 
     let client = Client::new();
     let response = client
         .post(&url)
-        .header("User-Agent", "rust-github-action")
-        .bearer_auth(token)
-        .json(&serde_json::json!({ "body": comment }))
-        .send()?;
+        .header("Authorization", format!("Bearer {}", github_token))
+        .header("User-Agent", "FibBot")
+        .header("Accept", "application/vnd.github.full+json")
+        .json(&serde_json::json!({ "body": pr_content }))
+        .send()
+        .await?;
 
     if response.status().is_success() {
-        Ok(())
+        println!("Comment posted successfully!");
     } else {
-        Err(format!("Failed to post comment: {} - {}", response.status(), comment).into())
+        eprintln!("Failed to post comment: {:?}", response.text().await?);
     }
-}
-use reqwest::blocking::Client;
-use std::env;
 
-pub fn post_comment(pr_number: u32, owner: &str, repo: &str, comment: String) -> Result<(), Box<dyn std::error::Error>> {
-    let token = env::var("GITHUB_TOKEN")?;
-    let url = format!("https://api.github.com/repos/{}/{}/issues/{}/comments", owner, repo, pr_number);
-
-    let client = Client::new();
-    let response = client
-        .post(&url)
-        .header("User-Agent", "rust-github-action")
-        .bearer_auth(token)
-        .json(&serde_json::json!({ "body": comment }))
-        .send()?;
-
-    if response.status().is_success() {
-        Ok(())
-    } else {
-        Err(format!("Failed to post comment: {} - {}", response.status(), comment).into())
-    }
+    Ok(())
 }
