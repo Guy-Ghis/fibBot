@@ -27,7 +27,7 @@ async fn main() {
     println!("FibBot application is running...");
     println!("Fibonacci Calculation Enabled: {}", enable_fib);
     println!("Max Threshold is: {}", max_threshold);
-    println!("the pull_request number is: {}",pr_number);
+    println!("The pull_request number is: {}",pr_number);
 
 
 let github_repository =
@@ -37,7 +37,7 @@ let github_repository =
     let repo = github_repository_vec[1];
 
 let pr_files = get_pull_request(owner, repo, pr_number).await;
-println!("Extracted numbers: {:?}", pr_files);
+// println!("Extracted numbers: {:?}", pr_files);
 
 let pr_files = match pr_files {
     Ok(files) => files,
