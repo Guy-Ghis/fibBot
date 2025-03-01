@@ -24,12 +24,3 @@ runs:
   args:
     - ${{ inputs.enable_fib }}
     - ${{ inputs.max_threshold }}
-    # - name: Build fibBot
-    #   run: |
-    #   shell: bash
-    # - name: Run fibBot
-    #   run: |
-    #     export PR_NUMBER="${{ inputs.pr_number }}"
-    #     export GITHUB_TOKEN="${{ inputs.github_token }}"
-    #     /app/fibbot "${{ inputs.enable_fib }}" "${{ inputs.max_threshold }}"
-    #   shell: bash
