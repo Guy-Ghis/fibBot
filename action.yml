@@ -19,14 +19,17 @@ inputs:
     description: "The token to use to interact with the GitHub API"
     required: true
 runs:
-  using: "composite"
-  steps:
-    - name: Build fibBot
-      run: |
-      shell: bash
-    - name: Run fibBot
-      run: |
-        export PR_NUMBER="${{ inputs.pr_number }}"
-        export GITHUB_TOKEN="${{ inputs.github_token }}"
-        ./target/release/fibbot "${{ inputs.enable_fib }}" "${{ inputs.max_threshold }}"
-      shell: bash
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.enable_fib }}
+    - ${{ inputs.max_threshold }}
+    # - name: Build fibBot
+    #   run: |
+    #   shell: bash
+    # - name: Run fibBot
+    #   run: |
+    #     export PR_NUMBER="${{ inputs.pr_number }}"
+    #     export GITHUB_TOKEN="${{ inputs.github_token }}"
+    #     /app/fibbot "${{ inputs.enable_fib }}" "${{ inputs.max_threshold }}"
+    #   shell: bash
