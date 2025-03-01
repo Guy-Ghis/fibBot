@@ -29,6 +29,6 @@ jobs:
       - name: Get PR number
         id: pr_number
         run: |
-          echo "PR_NUMBER=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
+          echo "pr_number=$(echo $GITHUB_REF | cut -d'/' -f3)" >> $GITHUB_ENV
           echo "enable_fib=true" >> $GITHUB_ENV
           echo "max_threshold=100" >> $GITHUB_ENV
