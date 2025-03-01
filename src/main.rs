@@ -27,7 +27,7 @@ async fn main() {
         // .parse::<u64>()
         // .expect("Invalid PR_NUMBER");
 
-        let pr_number = args.get(3).unwrap().parse::<u64>().unwrap_or(1);
+        let pr_number = args.get(3).unwrap_or(&"1".to_string()).parse::<u64>().unwrap_or(1);
 
     println!("FibBot application is running...");
     println!("Fibonacci Calculation Enabled: {}", enable_fib);
