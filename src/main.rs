@@ -27,8 +27,7 @@ async fn main() {
         // .parse::<u64>()
         // .expect("Invalid PR_NUMBER");
 
-        let pr_number = &args[3];
-        let pr_number: u64 = pr_number.parse().expect("failed to parse PR_NUMBER");
+        let pr_number = args.get(3).unwrap_or(&"1".to_string()).parse::<u64>().unwrap_or(1);
 
     println!("FibBot application is running...");
     println!("Fibonacci Calculation Enabled: {}", enable_fib);
@@ -37,7 +36,7 @@ async fn main() {
 
 
 let github_repository =
-        env::var("GITHUB_REPOSITORY").unwrap_or_else(|_| "t-Guy-Ghis/fibBot".to_string());
+        env::var("GITHUB_REPOSITORY").unwrap_or_else(|_| "Guy-Ghis/fibBot".to_string());
     let github_repository_vec = github_repository.split("/").collect::<Vec<&str>>();
     let owner = github_repository_vec[0];
     let repo = github_repository_vec[1];
@@ -66,6 +65,10 @@ println!("Extracted numbers: {:?}", pull_request_numbers);
 if pr_files.items.is_empty() {
     println!("No numbers found in this pull_request.");
 }
+
+let pr_content = pr_files.items.first().unwrap().patch.clone().unwrap();
+let _ = post_comment(&pr_content).await;
+
 let mut response =
     String::from("#### Fibonacci output of each number in the pull_request is:\n");
 for file in &pr_files {
