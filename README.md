@@ -1,4 +1,4 @@
-# fibBot
+# fibBot 
 
 This is a bot written in Rust that scans pull request content for numbers, calculates their Fibonacci numbers, and posts a comment with the results. The action will support two parameters which a "enable_fib" (flag to enable Fibonacci calculation) and "max_threshold" (a threshold limit).
 
