@@ -22,17 +22,19 @@ async fn main() {
         .parse()
         .unwrap_or(100);
 
-        let pr_number: u64 = env::var("INPUT_PR_NUMBER")
-        .expect("PR_NUMBER not set")
-        .parse::<u64>()
-        .expect("Invalid PR_NUMBER");
+        // let pr_number: u64 = env::var("INPUT_PR_NUMBER")
+        // .expect("PR_NUMBER not set")
+        // .parse::<u64>()
+        // .expect("Invalid PR_NUMBER");
+
+        let pr_number = &args[3];
+        let pr_number: u64 = pr_number.parse().expect("failed to parse PR_NUMBER");
 
     println!("FibBot application is running...");
     println!("Fibonacci Calculation Enabled: {}", enable_fib);
     println!("Max Threshold is: {}", max_threshold);
     println!("the pull_request number is: {}",pr_number);
 
-    let files = octocrab::instance().pulls("Guy-Ghis", "fibBot").list_files(pr_number).await;
 
 let github_repository =
         env::var("GITHUB_REPOSITORY").unwrap_or_else(|_| "t-Guy-Ghis/fibBot".to_string());
