@@ -24,3 +24,4 @@ runs:
   args:
     - ${{ inputs.enable_fib }}
     - ${{ inputs.max_threshold }}
+    - ${{ inputs.pr_number }}
