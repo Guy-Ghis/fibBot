@@ -7,7 +7,7 @@ pub async fn post_comment(pr_content: &str) -> Result<(), reqwest::Error> {
 
     let repo = env::var("GITHUB_REPOSITORY").expect("GITHUB_REPOSITORY not set");
 
-    let pr_number = args.get(3).unwrap().parse::<u64>().unwrap_or(1);
+    let pr_number = args.get(3).unwrap_or(&"1".to_string()).parse::<u64>().unwrap_or(1);
 
     let github_token = env::var("INPUT_GITHUB_TOKEN").expect("GITHUB_TOKEN not set");
 
