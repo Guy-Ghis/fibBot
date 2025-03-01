@@ -7,7 +7,7 @@ use fibonacci::fib;
 use comment::post_comment;
 use extract_numbers::extract_numbers;
 use get_pr_content::get_pull_request;
-use std::env::{self, args};
+use std::env::{self};
 use tokio;
 
 #[tokio::main]
@@ -22,10 +22,6 @@ async fn main() {
         .parse()
         .unwrap_or(100);
 
-    let pr_number: i128 = env::var("PR_NUMBER")
-    .expect("PR_NUMBER not set")
-    .parse::<i128>()
-    .expect("Invalid PR_NUMBER");
     // let pr_body = &args[2];
     // let github_token = &args[3];
     
