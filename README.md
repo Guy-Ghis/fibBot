@@ -17,7 +17,7 @@ It uses a set of different functions that enable it to extract numbers from a PR
 
 ## How to Use
 
-### Add it to Your Workflow  
+### Add it to Your Workflow
 ```yml
   steps:
     - name: fibBot
